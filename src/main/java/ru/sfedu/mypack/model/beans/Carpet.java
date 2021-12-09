@@ -1,12 +1,12 @@
 package ru.sfedu.mypack.model.beans;
 
 import com.opencsv.bean.CsvBindByName;
-import ru.sfedu.mypack.model.EnumCategory;
-import ru.sfedu.mypack.model.EnumColourWool;
+import ru.sfedu.mypack.model.enums.EnumCategory;
+import ru.sfedu.mypack.model.enums.EnumColourWool;
 
 import java.util.Objects;
 
-public class Carpet extends Product{
+public class Carpet extends Product {
 
     @CsvBindByName
     private String wool;

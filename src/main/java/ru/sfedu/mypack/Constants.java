@@ -1,17 +1,45 @@
 package ru.sfedu.mypack;
 
 public class Constants {
-    public static final String OWNER_FIRST_NAME = "OWNER.FIRSTNAME";
-    public static final String DEFAULT_CONFIG_PATH = "/src/main/resources/environment.properties";
-    public static final String EMP_CSV_SOURCE= "CSV.EMP.SOURCE";
-    public static final String UNIVER_CSV_SOURCE = "CSV.UNIVER.SOURCE";
+
+    public static final String CSV_CARPET = "CARPET_CSV";
+    public static final String CSV_CHAIR = "CHAIR_CSV";
+    public static final String CSV_CUSTOMER = "CUSTOMER_CSV";
+    public static final String CSV_ORDER = "ORDER_CSV";
+    public static final String CSV_PRODUCT = "PRODUCT_CSV";
+    public static final String CSV_TABLE = "TABLE_CSV";
+    public static final String NOT_ID = "Object[%d] is not exists";
+
+    public static final String PRODUCT_CONST = "Product";
+    public static final String CARPET_CONST = "Carpet";
+    public static final String CHAIR_CONST = "Chair";
+    public static final String TABLE_CONST = "Table";
+
+    public static final String GET_CUSTOMER_ORDERS = "getCustomerOrders";
+    public static final String GET_ALL_ORDERS = "getAllOrders";
+    public static final String GET_SUCCESS_ORDERS = "getSuccessOrders";
+    public static final String GET_UNSUCCESS_ORDERS = "getUnsuccessOrders";
+    public static final String GET_PRODUCT_LIST = "getProductList";
+    public static final String FILTER_PRODUCT_BY_CATEGORY = "filterProductByCategory";
+
+    public static final String MONGO_DATABASE_NAME = "LoftShop";
+    public static final String ACTOR_NAME = "System";
+    public static final String MONGO_COLLECTION_NAME = "HistoryCollection";
+    public static final String MONGO_DATE = " yyyy.MM.dd HH:mm:ss";
+    public static final String MONGO_CONNECT = "mongodb://localhost:27017";
+
+    public static final String ADD = "Add %s";
+    public static final String DELETE = "Delete %s";
+    public static final String UPDATE ="Update %s";
+    public static final String GET_ID = "Get %s";
 
 
-    public static final String RESULT_NOT_FOUND = "ID NOT FOUND";
-    public static final String RESULT_DELETE_SUCCESS = "DELETE SUCCESSFULLY";
-    public static final String RESULT_DELETE_UNSUCCESS = "DELETE UNSUCCESSFULLY";
-    public static final String RESULT_UPDATE_SUCCESS = "UPDATE SUCCESSFULLY";
-    public static final String RESULT_UPDATE_UNSUCCESS = "UPDATE UNSUCCESSFULLY";
-    public static final String RESULT_ADD_SUCCESS = "ADD SUCCESSFULLY";
-    public static final String RESULT_ADD_UNSUCCESS = "ADD UNSUCCESSFULLY";
+//    public static final String XML_CARPET = "CARPET_XML";
+//    public static final String XML_CHAIR = "CHAIR_XML";
+//    public static final String XML_CUSTOMER = "CUSTOMER_XML";
+//    public static final String XML_ORDER = "ORDER_XML";
+//    public static final String XML_PRODUCT = "PRODUCT_XML";
+//    public static final String XML_TABLE = "TABLE_XML";
+
+
 }

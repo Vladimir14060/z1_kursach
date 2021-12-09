@@ -6,8 +6,7 @@ import ru.sfedu.mypack.Main;
 import ru.sfedu.mypack.api.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.sfedu.mypack.model.beans.Emp;
-import ru.sfedu.mypack.model.beans.Univer;
+import ru.sfedu.mypack.model.beans.*;
 
 
 public class TestBase {

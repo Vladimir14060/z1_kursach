@@ -1,29 +1,34 @@
 package ru.sfedu.mypack.model;
 
-import java.util.List;
+import ru.sfedu.mypack.model.enums.EnumResult;
+
 
 public class Result<T> {
 
-    private List<T> data;
+    private T data;
     private EnumResult resultEnum;
     private String message;
 
-
-    public Result(List<T> data, EnumResult resultEnum, String message) {
-        this.resultEnum = resultEnum;
-        this.message = message;
+    public Result(T data, EnumResult resultEnum, String message) {
         this.data = data;
-    }
-
-    public void setResultEnum(EnumResult resultEnum) {
         this.resultEnum = resultEnum;
-    }
-
-    public void setMessage(String message) {
         this.message = message;
     }
 
-    public void setData(List<T> data) {
+    public Result(EnumResult resultEnum, T data) {
+        this.data = data;
+        this.resultEnum = resultEnum;
+    }
+
+    public Result(EnumResult resultEnum) {
+        this.resultEnum = resultEnum;
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
         this.data = data;
     }
 
@@ -31,22 +36,25 @@ public class Result<T> {
         return resultEnum;
     }
 
+    public void setResultEnum(EnumResult resultEnum) {
+        this.resultEnum = resultEnum;
+    }
+
     public String getMessage() {
         return message;
     }
 
-    public List<T> getData() {
-        return data;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     @Override
     public String toString() {
         return "Result{" +
-                "resultEnum=" + resultEnum +
-                ", message='" + message + '\'' +
-                ", data=" + data +
+                "data=" + data + '\'' +
+                ", resultEnum=" + resultEnum + '\'' +
+                ", message='" + message +
                 '}';
     }
-
 }
 

@@ -1,7 +1,7 @@
 package ru.sfedu.mypack.model.beans;
 
 import com.opencsv.bean.CsvBindByName;
-import ru.sfedu.mypack.model.EnumCategory;
+import ru.sfedu.mypack.model.enums.EnumCategory;
 
 
 import java.io.Serializable;

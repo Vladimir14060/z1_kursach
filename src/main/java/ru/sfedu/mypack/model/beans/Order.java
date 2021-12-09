@@ -1,8 +1,12 @@
 package ru.sfedu.mypack.model.beans;
 
 import com.opencsv.bean.CsvBindByName;
+import com.opencsv.bean.CsvCustomBindByName;
+import ru.sfedu.mypack.model.converter.CustomerConverter;
+import ru.sfedu.mypack.model.converter.ProductConverter;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 public class Order implements Serializable {
@@ -10,11 +14,11 @@ public class Order implements Serializable {
     @CsvBindByName
     private long id;
 
-    @CsvBindByName
+    @CsvCustomBindByName(converter = CustomerConverter.class)
     private Customer customer;
 
-    @CsvBindByName
-    private Product product;
+    @CsvCustomBindByName(converter = ProductConverter.class)
+    private List<Product> product;
 
     @CsvBindByName
     private Double productPrice;
@@ -25,13 +29,16 @@ public class Order implements Serializable {
     @CsvBindByName
     private boolean isFinished;
 
-    public Order(long id, Customer customer, Product product, Double productPrice, Double deliveryPrice, boolean isFinished) {
+    public Order(long id, Customer customer, List<Product> product, Double productPrice, Double deliveryPrice, boolean isFinished) {
         this.id = id;
         this.customer = customer;
         this.product = product;
         this.productPrice = productPrice;
         this.deliveryPrice = deliveryPrice;
         this.isFinished = isFinished;
+    }
+
+    public Order() {
     }
 
     public long getId() {
@@ -50,11 +57,11 @@ public class Order implements Serializable {
         this.customer = customer;
     }
 
-    public Product getProduct() {
+    public List<Product> getProduct() {
         return product;
     }
 
-    public void setProduct(Product product) {
+    public void setProduct(List<Product> product) {
         this.product = product;
     }
 
@@ -85,14 +92,14 @@ public class Order implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Order)) return false;
         Order order = (Order) o;
-        return id == order.id && isFinished == order.isFinished && Objects.equals(customer, order.customer) && Objects.equals(product, order.product) && Objects.equals(productPrice, order.productPrice) && Objects.equals(deliveryPrice, order.deliveryPrice);
+        return getId() == order.getId() && isFinished() == order.isFinished() && Objects.equals(getCustomer(), order.getCustomer()) && Objects.equals(getProduct(), order.getProduct()) && Objects.equals(getProductPrice(), order.getProductPrice()) && Objects.equals(getDeliveryPrice(), order.getDeliveryPrice());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, customer, product, productPrice, deliveryPrice, isFinished);
+        return Objects.hash(getId(), getCustomer(), getProduct(), getProductPrice(), getDeliveryPrice(), isFinished());
     }
 
     @Override
@@ -103,7 +110,7 @@ public class Order implements Serializable {
                 ", product=" + product + '\'' +
                 ", productPrice=" + productPrice + '\'' +
                 ", deliveryPrice=" + deliveryPrice + '\'' +
-                ", isFinished=" + isFinished + '\'' +
+                ", isFinished=" + isFinished +
                 '}';
     }
 }

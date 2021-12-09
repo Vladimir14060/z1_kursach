@@ -1,4 +1,4 @@
-package ru.sfedu.mypack.model;
+package ru.sfedu.mypack.model.enums;
 
 public enum EnumCategory {
     COFFEETABLE,
@@ -7,5 +7,6 @@ public enum EnumCategory {
     BARCHAIR,
     ORDINARYCHAIR,
     SMALLCHAIR,
-    CARPET
+    CARPET,
+    NONE
 }
