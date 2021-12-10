@@ -34,6 +34,10 @@ public class Customer implements Serializable {
     }
 
     public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setId() {
         this.id = System.currentTimeMillis();
     }
 

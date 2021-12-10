@@ -44,6 +44,10 @@ public class Order implements Serializable {
         return id;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public void setId() {
         this.id = System.currentTimeMillis();
     }
