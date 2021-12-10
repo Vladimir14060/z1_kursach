@@ -11,9 +11,7 @@ public interface IDataProvider {
 
     Result<Customer> findCustomer(long id);
 
-    Result<List<Order>> getCustomerOrders(long id, boolean sum);
-
-    Result<Double> calculateOrderCost(List<Order> orderList);
+    Result<List<Order>> getCustomerOrders(long id);
 
     Result<List<Order>> getAllOrders(String typeOrder);
 

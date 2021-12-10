@@ -32,110 +32,101 @@ public class DataProviderCsv implements IDataProvider {
     private static final Logger log = LogManager.getLogger(Main.class);
 
     @Override
-    public Boolean createOrderProduct(long orderId, long id){
-        try{
+    public Boolean createOrderProduct(long orderId, long id) {
+        try {
             Order order = getOrderById(orderId).getData();
-            order.setCustomer(findCustomer(id).getData());
+            Customer customer = getCustomerById(id).getData();
+            if (order.getId() == 0){
+                return false;
+            }
+            if (customer.getId() == 0){
+                return false;
+            }
+            order.setCustomer(customer);
             updateOrder(order);
             return true;
-        } catch (Exception e){
+        } catch (Exception e) {
             log.error(e);
             return false;
         }
 
     }
 
-   @Override
-    public Result<Customer> findCustomer(long id){
+    @Override
+    public Result<Customer> findCustomer(long id) {
         return new Result<>(EnumResult.Success, getCustomerById(id).getData());
-   }
+    }
 
-   @Override
-    public Result<List<Order>> getCustomerOrders(long id, boolean sum){
-        try{
+    @Override
+    public Result<List<Order>> getCustomerOrders(long id) {
+        try {
             String method = Constants.GET_CUSTOMER_ORDERS;
             List<Order> objects = csvToBean(Order.class, Constants.CSV_ORDER, method);
             List<Order> customersList = objects.stream().filter(order -> order.getCustomer().getId() == id).collect(Collectors.toList());
-            if(sum){
-                return new Result(EnumResult.Success, calculateOrderCost(customersList).getData());
-            }
-            else{
-                return new Result(EnumResult.Success, customersList);
-            }
-        } catch (Exception e){
-            log.error(e);
-            return new Result<>(EnumResult.Error);
-        }
-   }
+            return new Result(EnumResult.Success, customersList);
 
-    @Override
-    public Result<Double> calculateOrderCost(List<Order> orderList){
-        try {
-            double sum = 0.0;
-            for (int i = 0; i < orderList.toArray().length; i++) {
-                sum += orderList.get(i).getDeliveryPrice() + orderList.get(i).getProductPrice();
-            }
-            return new Result<>(EnumResult.Success, sum);
-        } catch (Exception e){
+        } catch (Exception e) {
             log.error(e);
             return new Result<>(EnumResult.Error);
         }
     }
 
     @Override
-    public Result<List<Order>> getAllOrders(String typeOfOrder){
+    public Result<List<Order>> getAllOrders(String typeOfOrder) {
         try {
             String method = Constants.GET_ALL_ORDERS;
             List<Order> orderList = csvToBean(Order.class, Constants.CSV_ORDER, method);
-            switch (typeOfOrder.toLowerCase()){
+            switch (typeOfOrder.toLowerCase()) {
                 case "success":
                     return new Result<>(EnumResult.Success, getSuccessedOrder().getData());
                 case "unsuccess":
                     return new Result<>(EnumResult.Success, getUnsuccessedOrder().getData());
-                default:
+                case "all":
                     return new Result<>(EnumResult.Success, orderList);
+                default:
+                    return new Result<>(EnumResult.Error);
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             log.error(e);
             return new Result<>(EnumResult.Error);
         }
     }
 
     @Override
-    public Result<List<Order>> getSuccessedOrder(){
+    public Result<List<Order>> getSuccessedOrder() {
         try {
             String method = Constants.GET_SUCCESS_ORDERS;
             List<Order> orderList = csvToBean(Order.class, Constants.CSV_ORDER, method);
             List<Order> newOrderList = orderList.stream().filter(Order::isFinished).collect(Collectors.toList());
             return new Result<>(EnumResult.Success, newOrderList);
-        } catch (Exception e){
+        } catch (Exception e) {
             log.error(e);
             return new Result<>(EnumResult.Error);
         }
     }
 
     @Override
-    public Result<List<Order>> getUnsuccessedOrder(){
+    public Result<List<Order>> getUnsuccessedOrder() {
         try {
             String method = Constants.GET_UNSUCCESS_ORDERS;
             List<Order> orderList = csvToBean(Order.class, Constants.CSV_ORDER, method);
             List<Order> newOrderList = orderList.stream().filter(order -> !order.isFinished()).collect(Collectors.toList());
             return new Result<>(EnumResult.Success, newOrderList);
-        } catch (Exception e){
+        } catch (Exception e) {
             log.error(e);
             return new Result<>(EnumResult.Error);
         }
     }
 
     @Override
-    public Result<List<Product>> getProductsList(EnumCategory category){
+    public Result<List<Product>> getProductsList(EnumCategory category) {
         try {
-            if(category == null){
+            if (category == null) {
                 return new Result<>(EnumResult.Error);
             }
             String method = Constants.GET_PRODUCT_LIST;
             List<Product> productList = csvToBean(Product.class, Constants.CSV_PRODUCT, method);
-            switch (category){
+            switch (category) {
                 case NONE -> {
                     return new Result<>(EnumResult.Success, productList);
                 }
@@ -143,27 +134,27 @@ public class DataProviderCsv implements IDataProvider {
                     return new Result(EnumResult.Success, filterProductByCategory(category));
                 }
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             log.error(e);
             return new Result<>(EnumResult.Error);
         }
     }
 
     @Override
-    public Result<List<Product>> filterProductByCategory(EnumCategory category){
+    public Result<List<Product>> filterProductByCategory(EnumCategory category) {
         try {
             String method = Constants.FILTER_PRODUCT_BY_CATEGORY;
             List<Product> productList = csvToBean(Product.class, Constants.CSV_PRODUCT, method);
             List<Product> sortedList = productList.stream().filter(product -> product.getCategory() == category).collect(Collectors.toList());
-            return new Result<>(EnumResult.Success,sortedList);
-        } catch (Exception e){
+            return new Result<>(EnumResult.Success, sortedList);
+        } catch (Exception e) {
             log.error(e);
             return new Result(EnumResult.Error);
         }
     }
 
     @Override
-    public Boolean addOrder(Order order){
+    public Boolean addOrder(Order order) {
         final String method = String.format(Constants.ADD, Order.class.getSimpleName());
         List<Order> orderList = csvToBean(Order.class, Constants.CSV_ORDER, method);
         if (orderList.stream().anyMatch(o -> o.getId() == order.getId())) {
@@ -174,7 +165,7 @@ public class DataProviderCsv implements IDataProvider {
     }
 
     @Override
-    public Boolean deleteOrder(long id){
+    public Boolean deleteOrder(long id) {
         final String method = String.format(Constants.DELETE, Order.class.getSimpleName());
         List<Order> objects = csvToBean(Order.class, Constants.CSV_ORDER, method);
         objects.removeIf(o -> o.getId() == id);
@@ -183,10 +174,10 @@ public class DataProviderCsv implements IDataProvider {
     }
 
     @Override
-    public Boolean updateOrder(Order order){
+    public Boolean updateOrder(Order order) {
         final String method = String.format(Constants.UPDATE, Order.class.getSimpleName());
         List<Order> objects = csvToBean(Order.class, Constants.CSV_ORDER, method);
-        if (objects.stream().noneMatch(o -> o.getId() == order.getId())){
+        if (objects.stream().noneMatch(o -> o.getId() == order.getId())) {
             return false;
         }
         objects.removeIf(o -> o.getId() == order.getId());
@@ -195,7 +186,7 @@ public class DataProviderCsv implements IDataProvider {
     }
 
     @Override
-    public Result<Order> getOrderById(long id){
+    public Result<Order> getOrderById(long id) {
         final String method = String.format(Constants.GET_ID, Order.class.getSimpleName());
         List<Order> objects = csvToBean(Order.class, Constants.CSV_ORDER, method);
         return new Result<>(EnumResult.Success, objects.stream().filter(o -> o.getId() == id).findFirst().orElse(new Order()));
@@ -203,9 +194,9 @@ public class DataProviderCsv implements IDataProvider {
 
 
     @Override
-    public Boolean addProduct(Product product){
+    public Boolean addProduct(Product product) {
         return addSharedProduct(Product.class, product);
-    }
+}
 
     @Override
     public Boolean deleteProduct(long id){
@@ -380,8 +371,8 @@ public class DataProviderCsv implements IDataProvider {
             csvWriter.close();
             fileWriter.close();
             result = EnumResult.Success;
-        } catch (Exception exception){
-            log.error(exception);
+        } catch (Exception e){
+            log.error(e);
             result = EnumResult.Error;
         }
         saveToLog(createHistoryContent(method, lst, result));
@@ -396,8 +387,8 @@ public class DataProviderCsv implements IDataProvider {
             csvReader.close();
             saveToLog(createHistoryContent(method, querySet, EnumResult.Success));
             return querySet;
-        } catch (Exception exception){
-            log.error(exception);
+        } catch (Exception e){
+            log.error(e);
         }
         saveToLog(createHistoryContent(method, null, EnumResult.Error));
         return new ArrayList<>();

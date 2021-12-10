@@ -6,7 +6,6 @@ import ru.sfedu.mypack.model.converter.CustomerConverter;
 import ru.sfedu.mypack.model.converter.ProductConverter;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
 
 public class Order implements Serializable {
@@ -18,7 +17,7 @@ public class Order implements Serializable {
     private Customer customer;
 
     @CsvCustomBindByName(converter = ProductConverter.class)
-    private List<Product> product;
+    private Product product;
 
     @CsvBindByName
     private Double productPrice;
@@ -29,7 +28,7 @@ public class Order implements Serializable {
     @CsvBindByName
     private boolean isFinished;
 
-    public Order(long id, Customer customer, List<Product> product, Double productPrice, Double deliveryPrice, boolean isFinished) {
+    public Order(long id, Customer customer, Product product, Double productPrice, Double deliveryPrice, boolean isFinished) {
         this.id = id;
         this.customer = customer;
         this.product = product;
@@ -45,7 +44,7 @@ public class Order implements Serializable {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId() {
         this.id = System.currentTimeMillis();
     }
 
@@ -57,11 +56,11 @@ public class Order implements Serializable {
         this.customer = customer;
     }
 
-    public List<Product> getProduct() {
+    public Product getProduct() {
         return product;
     }
 
-    public void setProduct(List<Product> product) {
+    public void setProduct(Product product) {
         this.product = product;
     }
 

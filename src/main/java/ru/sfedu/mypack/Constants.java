@@ -10,10 +10,10 @@ public class Constants {
     public static final String CSV_TABLE = "TABLE_CSV";
     public static final String NOT_ID = "Object[%d] is not exists";
 
-    public static final String PRODUCT_CONST = "Product";
-    public static final String CARPET_CONST = "Carpet";
-    public static final String CHAIR_CONST = "Chair";
-    public static final String TABLE_CONST = "Table";
+    public static final String PRODUCT_CONST = "product";
+    public static final String CARPET_CONST = "carpet";
+    public static final String CHAIR_CONST = "chair";
+    public static final String TABLE_CONST = "table";
 
     public static final String GET_CUSTOMER_ORDERS = "getCustomerOrders";
     public static final String GET_ALL_ORDERS = "getAllOrders";
