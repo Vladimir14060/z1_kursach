@@ -8,6 +8,14 @@ public class Constants {
     public static final String CSV_ORDER = "ORDER_CSV";
     public static final String CSV_PRODUCT = "PRODUCT_CSV";
     public static final String CSV_TABLE = "TABLE_CSV";
+
+    public static final String XML_CARPET = "CARPET_XML";
+    public static final String XML_CHAIR = "CHAIR_XML";
+    public static final String XML_CUSTOMER = "CUSTOMER_XML";
+    public static final String XML_ORDER = "ORDER_XML";
+    public static final String XML_PRODUCT = "PRODUCT_XML";
+    public static final String XML_TABLE = "TABLE_XML";
+
     public static final String NOT_ID = "Object[%d] is not exists";
 
     public static final String PRODUCT_CONST = "product";
@@ -32,14 +40,5 @@ public class Constants {
     public static final String DELETE = "Delete %s";
     public static final String UPDATE ="Update %s";
     public static final String GET_ID = "Get %s";
-
-
-//    public static final String XML_CARPET = "CARPET_XML";
-//    public static final String XML_CHAIR = "CHAIR_XML";
-//    public static final String XML_CUSTOMER = "CUSTOMER_XML";
-//    public static final String XML_ORDER = "ORDER_XML";
-//    public static final String XML_PRODUCT = "PRODUCT_XML";
-//    public static final String XML_TABLE = "TABLE_XML";
-
 
 }

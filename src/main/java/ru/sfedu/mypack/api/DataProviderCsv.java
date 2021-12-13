@@ -222,7 +222,7 @@ public class DataProviderCsv implements IDataProvider {
             return false;
         }
         customers.add(customer);
-        return beanToCsv(customers, Constants.CSV_ORDER, method) != EnumResult.Error;
+        return beanToCsv(customers, Constants.CSV_CUSTOMER, method) != EnumResult.Error;
     }
 
     @Override
@@ -330,10 +330,10 @@ public class DataProviderCsv implements IDataProvider {
 
     public <T extends Product> Boolean deleteSharedProduct(Class<T> cl, long id){
         final String method = String.format(Constants.DELETE, cl.getSimpleName());
-        String clazz = getClassName(cl);
-        List<T> objects = csvToBean(cl, clazz, method);
+        String className = getClassName(cl);
+        List<T> objects = csvToBean(cl, className, method);
         objects.removeIf(o -> o.getId() == id);
-        beanToCsv(objects, clazz, method);
+        beanToCsv(objects, className, method);
         return true;
     }
 
@@ -351,8 +351,8 @@ public class DataProviderCsv implements IDataProvider {
 
     public <T extends Product> Optional<T> getSharedProductById(Class<T> cl, long id){
         final String method = String.format(Constants.GET_ID, cl.getSimpleName());
-        String clazz = getClassName(cl);
-        List<T> objects = csvToBean(cl, clazz, method);
+        String className = getClassName(cl);
+        List<T> objects = csvToBean(cl, className, method);
         return objects.stream().filter(o -> o.getId() == id).findFirst();
     }
 
