@@ -1,0 +1,11 @@
+<list>
+   <object class="ru.sfedu.mypack.model.beans.Carpet" id="1639420739130">
+      <name>Carpet</name>
+      <category>CARPET</category>
+      <price>15.0</price>
+      <wool>baran</wool>
+      <weight>15.0</weight>
+      <length>25.0</length>
+      <colour>WHITE</colour>
+   </object>
+</list>

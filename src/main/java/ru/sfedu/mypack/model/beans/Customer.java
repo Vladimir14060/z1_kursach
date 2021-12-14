@@ -1,18 +1,25 @@
 package ru.sfedu.mypack.model.beans;
 
 import com.opencsv.bean.CsvBindByName;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 
 import java.io.Serializable;
 import java.util.Objects;
 
+@Root(name = "Customer")
 public class Customer implements Serializable {
 
+    @Attribute
     @CsvBindByName
     private long id;
 
+    @Element
     @CsvBindByName
     private String name;
 
+    @Element
     @CsvBindByName
     private String address;
 

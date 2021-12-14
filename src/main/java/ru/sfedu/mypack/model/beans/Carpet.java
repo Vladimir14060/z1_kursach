@@ -1,22 +1,29 @@
 package ru.sfedu.mypack.model.beans;
 
 import com.opencsv.bean.CsvBindByName;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 import ru.sfedu.mypack.model.enums.EnumCategory;
 import ru.sfedu.mypack.model.enums.EnumColourWool;
 
 import java.util.Objects;
 
+@Root(name = "Carpet")
 public class Carpet extends Product {
 
+    @Element
     @CsvBindByName
     private String wool;
 
+    @Element
     @CsvBindByName
     private Double weight;
 
+    @Element
     @CsvBindByName
     private Double length;
 
+    @Element
     @CsvBindByName
     private EnumColourWool colour;
 

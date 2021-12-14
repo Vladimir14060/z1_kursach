@@ -2,29 +2,39 @@ package ru.sfedu.mypack.model.beans;
 
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvCustomBindByName;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 import ru.sfedu.mypack.model.converter.CustomerConverter;
 import ru.sfedu.mypack.model.converter.ProductConverter;
 
 import java.io.Serializable;
 import java.util.Objects;
 
+@Root(name = "Order")
 public class Order implements Serializable {
 
+    @Attribute
     @CsvBindByName
     private long id;
 
+    @Element
     @CsvCustomBindByName(converter = CustomerConverter.class)
     private Customer customer;
 
+    @Element
     @CsvCustomBindByName(converter = ProductConverter.class)
     private Product product;
 
+    @Element
     @CsvBindByName
     private Double productPrice;
 
+    @Element
     @CsvBindByName
     private Double deliveryPrice;
 
+    @Element
     @CsvBindByName
     private boolean isFinished;
 

@@ -59,9 +59,9 @@ public class DataProviderXml implements IDataProvider{
     public Result<List<Order>> getCustomerOrders(long id) {
         try {
             String method = Constants.GET_CUSTOMER_ORDERS;
-            List<Order> objects = xmlToBean(Constants.XML_PRODUCT, method);
+            List<Order> objects = xmlToBean(Constants.XML_ORDER, method);
             List<Order> customersList = objects.stream().filter(order -> order.getCustomer().getId() == id).collect(Collectors.toList());
-            return new Result(EnumResult.Success, customersList);
+            return new Result<>(EnumResult.Success, customersList);
 
         } catch (Exception e) {
             log.error(e);
@@ -73,7 +73,7 @@ public class DataProviderXml implements IDataProvider{
     public Result<List<Order>> getAllOrders(String typeOfOrder) {
         try {
             String method = Constants.GET_ALL_ORDERS;
-            List<Order> orderList = xmlToBean(Constants.XML_PRODUCT, method);
+            List<Order> orderList = xmlToBean(Constants.XML_ORDER, method);
             switch (typeOfOrder.toLowerCase()) {
                 case "success":
                     return new Result<>(EnumResult.Success, getSuccessedOrder().getData());
@@ -94,7 +94,7 @@ public class DataProviderXml implements IDataProvider{
     public Result<List<Order>> getSuccessedOrder() {
         try {
             String method = Constants.GET_SUCCESS_ORDERS;
-            List<Order> orderList = xmlToBean(Constants.XML_PRODUCT, method);
+            List<Order> orderList = xmlToBean(Constants.XML_ORDER, method);
             List<Order> newOrderList = orderList.stream().filter(Order::isFinished).collect(Collectors.toList());
             return new Result<>(EnumResult.Success, newOrderList);
         } catch (Exception e) {
@@ -107,7 +107,7 @@ public class DataProviderXml implements IDataProvider{
     public Result<List<Order>> getUnsuccessedOrder() {
         try {
             String method = Constants.GET_UNSUCCESS_ORDERS;
-            List<Order> orderList = xmlToBean(Constants.XML_PRODUCT, method);
+            List<Order> orderList = xmlToBean(Constants.XML_ORDER, method);
             List<Order> newOrderList = orderList.stream().filter(order -> !order.isFinished()).collect(Collectors.toList());
             return new Result<>(EnumResult.Success, newOrderList);
         } catch (Exception e) {
@@ -356,10 +356,41 @@ public class DataProviderXml implements IDataProvider{
 
 
     private static HistoryContent createHistoryContent(String method, Object object, EnumResult enumResult){
-        return new HistoryContent(DataProviderCsv.class.getSimpleName(), new Date(), Constants.ACTOR_NAME, method, object, enumResult);
+        return new HistoryContent(DataProviderXml.class.getSimpleName(), new Date(), Constants.ACTOR_NAME, method, object, enumResult);
     }
 
-   //добавить xmltoBean and beanToXml
+    private <T> EnumResult beanToXml(List<T> lst, String key, String method){
+        EnumResult result;
+        try {
+            FileWriter fileWriter = new FileWriter(ConfigurationUtil.getConfigurationEntry(key));
+            Serializer serializer = new Persister();
+            XmlWrapper<T> container = new XmlWrapper<T>(lst);
+            serializer.write(container, fileWriter);
+            fileWriter.close();
+            result = EnumResult.Success;
+        } catch (Exception e){
+            log.error(e);
+            result = EnumResult.Error;
+        }
+        saveToLog(createHistoryContent(method, lst, result));
+        return result;
+    }
+
+    public static <T> List<T> xmlToBean(String key, String method){
+        try {
+            FileReader fileReader = new FileReader(ConfigurationUtil.getConfigurationEntry(key));
+            Serializer serializer = new Persister();
+            XmlWrapper<T> container = serializer.read(XmlWrapper.class, fileReader);
+            final List<T> querySet = container.getList();
+            fileReader.close();
+            saveToLog(createHistoryContent(method, querySet, EnumResult.Success));
+            return querySet;
+        } catch (Exception e){
+            log.error(e);
+        }
+        saveToLog(createHistoryContent(method, null, EnumResult.Error));
+        return new ArrayList<>();
+    }
 
     public <T> String getClassName(Class<T> cl){
         return switch (cl.getSimpleName().toLowerCase()){

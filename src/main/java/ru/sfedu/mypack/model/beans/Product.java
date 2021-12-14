@@ -1,23 +1,31 @@
 package ru.sfedu.mypack.model.beans;
 
 import com.opencsv.bean.CsvBindByName;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 import ru.sfedu.mypack.model.enums.EnumCategory;
 
 
 import java.io.Serializable;
 import java.util.Objects;
 
+@Root(name = "Product")
 public class Product implements Serializable {
 
+    @Attribute
     @CsvBindByName
     public long id;
 
+    @Element
     @CsvBindByName
     public String name;
 
+    @Element
     @CsvBindByName
     public EnumCategory category;
 
+    @Element
     @CsvBindByName
     public Double price;
 
