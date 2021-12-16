@@ -4,10 +4,8 @@ import java.io.*;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.sfedu.mypack.api.DataProviderCsv;
-import ru.sfedu.mypack.api.DataProviderXml;
+import ru.sfedu.mypack.api.DataProviderJdbc;
 import ru.sfedu.mypack.model.beans.Carpet;
-import ru.sfedu.mypack.model.beans.Product;
 import ru.sfedu.mypack.model.enums.EnumCategory;
 import ru.sfedu.mypack.model.enums.EnumColourWool;
 
@@ -16,6 +14,7 @@ public class Main {
     private static final Logger log = LogManager.getLogger(Main.class);
 
     public static void main(String[] args) throws IOException {
+//        CSV
 //        DataProviderCsv dataProviderCsv = new DataProviderCsv();
 //        Carpet carpet = new Carpet();
 //        carpet.setId();
@@ -30,6 +29,7 @@ public class Main {
 //        dataProviderCsv.deleteCarpet(carpet.getId());
 
 
+//        XML
 //        DataProviderXml dataProviderXml = new DataProviderXml();
 //        Carpet carpet =new Carpet();
 //        carpet.setId();
@@ -44,12 +44,26 @@ public class Main {
 //        dataProviderXml.deleteCarpet(carpet.getId());
 
 
+//        Delte CSV and XML by id
 //        DataProviderCsv dataProviderCsv = new DataProviderCsv();
 //        DataProviderXml dataProviderXml = new DataProviderXml();
-//
-//        dataProviderCsv.deleteCarpet(1639422708516L);
-//        dataProviderXml.deleteCarpet(1639422679757L);
+//        dataProviderCsv.deleteCarpet(L);
+//        dataProviderXml.deleteCarpet(L);
 
+//        Db
+//        DataProviderJdbc dataProviderJdbc = new DataProviderJdbc();
+//        dataProviderJdbc.deleteAllTables();
+//        dataProviderJdbc.createTables();
+//        Carpet carpet = new Carpet();
+//        carpet.setId();
+//        carpet.setName("Carpet");
+//        carpet.setCategory(EnumCategory.CARPET);
+//        carpet.setPrice(150.0);
+//        carpet.setWool("ovechka");
+//        carpet.setWeight(50.0);
+//        carpet.setLength(150.0);
+//        carpet.setColour(EnumColourWool.RED);
+//        dataProviderJdbc.addCarpet(carpet);
 
 
     }

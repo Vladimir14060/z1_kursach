@@ -32,18 +32,25 @@ public class DataProviderXml implements IDataProvider{
     @Override
     public Boolean createOrderProduct(long orderId, long id) {
         try {
+            log.info("createOrderProduct");
             Order order = getOrderById(orderId).getData();
+            log.debug(order);
             Customer customer = getCustomerById(id).getData();
+            log.debug(customer);
             if (order.getId() == 0){
+                log.error("Order == 0");
                 return false;
             }
             if (customer.getId() == 0){
+                log.error("Customer == 0");
                 return false;
             }
             order.setCustomer(customer);
             updateOrder(order);
+            log.info("createOrderProduct - success");
             return true;
         } catch (Exception e) {
+            log.info("createOrderProduct - unsuccess");
             log.error(e);
             return false;
         }
@@ -58,12 +65,15 @@ public class DataProviderXml implements IDataProvider{
     @Override
     public Result<List<Order>> getCustomerOrders(long id) {
         try {
+            log.info("getCustomerOrders");
             String method = Constants.GET_CUSTOMER_ORDERS;
             List<Order> objects = xmlToBean(Constants.XML_ORDER, method);
+            log.debug(objects);
             List<Order> customersList = objects.stream().filter(order -> order.getCustomer().getId() == id).collect(Collectors.toList());
+            log.info("getCustomerOrders - success");
             return new Result<>(EnumResult.Success, customersList);
-
         } catch (Exception e) {
+            log.info("getCustomerOrders - unsuccess");
             log.error(e);
             return new Result<>(EnumResult.Error);
         }
@@ -72,19 +82,26 @@ public class DataProviderXml implements IDataProvider{
     @Override
     public Result<List<Order>> getAllOrders(String typeOfOrder) {
         try {
+            log.info("getAllOrders");
             String method = Constants.GET_ALL_ORDERS;
             List<Order> orderList = xmlToBean(Constants.XML_ORDER, method);
+            log.debug(orderList);
             switch (typeOfOrder.toLowerCase()) {
                 case "success":
+                    log.debug("Order success" + getSuccessedOrder());
                     return new Result<>(EnumResult.Success, getSuccessedOrder().getData());
                 case "unsuccess":
+                    log.debug("Order unsuccess" + getUnsuccessedOrder());
                     return new Result<>(EnumResult.Success, getUnsuccessedOrder().getData());
                 case "all":
+                    log.debug("Orderr all" + orderList);
                     return new Result<>(EnumResult.Success, orderList);
                 default:
+                    log.error("getAllOrders - unsuccess");
                     return new Result<>(EnumResult.Error);
             }
         } catch (Exception e) {
+            log.info("getAllOrders - unsuccess");
             log.error(e);
             return new Result<>(EnumResult.Error);
         }
@@ -119,20 +136,26 @@ public class DataProviderXml implements IDataProvider{
     @Override
     public Result<List<Product>> getProductsList(EnumCategory category) {
         try {
+            log.info("getProductsList");
             if (category == null) {
+                log.error("Category == null");
                 return new Result<>(EnumResult.Error);
             }
             String method = Constants.GET_PRODUCT_LIST;
             List<Product> productList = xmlToBean(Constants.XML_PRODUCT, method);
+            log.debug(productList);
             switch (category) {
                 case NONE -> {
+                    log.debug("ProductsList" + productList);
                     return new Result<>(EnumResult.Success, productList);
                 }
                 default -> {
+                    log.debug("ProductsList" + filterProductByCategory(category));
                     return new Result(EnumResult.Success, filterProductByCategory(category));
                 }
             }
         } catch (Exception e) {
+            log.info("getProductsList - unsuccess");
             log.error(e);
             return new Result<>(EnumResult.Error);
         }

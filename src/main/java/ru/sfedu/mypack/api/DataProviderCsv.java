@@ -34,18 +34,25 @@ public class DataProviderCsv implements IDataProvider {
     @Override
     public Boolean createOrderProduct(long orderId, long id) {
         try {
+            log.info("createOrderProduct");
             Order order = getOrderById(orderId).getData();
+            log.debug(order);
             Customer customer = getCustomerById(id).getData();
+            log.debug(customer);
             if (order.getId() == 0){
+                log.error("Order == 0");
                 return false;
             }
             if (customer.getId() == 0){
+                log.error("Customer == 0");
                 return false;
             }
             order.setCustomer(customer);
             updateOrder(order);
+            log.info("createOrderProduct - success");
             return true;
         } catch (Exception e) {
+            log.info("createOrderProduct - unsuccess");
             log.error(e);
             return false;
         }
@@ -60,12 +67,15 @@ public class DataProviderCsv implements IDataProvider {
     @Override
     public Result<List<Order>> getCustomerOrders(long id) {
         try {
+            log.info("getCustomerOrders");
             String method = Constants.GET_CUSTOMER_ORDERS;
             List<Order> objects = csvToBean(Order.class, Constants.CSV_ORDER, method);
+            log.debug(objects);
             List<Order> customersList = objects.stream().filter(order -> order.getCustomer().getId() == id).collect(Collectors.toList());
+            log.info("getCustomerOrders - success");
             return new Result(EnumResult.Success, customersList);
-
         } catch (Exception e) {
+            log.info("getCustomerOrders - unsuccess");
             log.error(e);
             return new Result<>(EnumResult.Error);
         }
@@ -74,19 +84,26 @@ public class DataProviderCsv implements IDataProvider {
     @Override
     public Result<List<Order>> getAllOrders(String typeOfOrder) {
         try {
+            log.info("getAllOrders");
             String method = Constants.GET_ALL_ORDERS;
             List<Order> orderList = csvToBean(Order.class, Constants.CSV_ORDER, method);
+            log.debug(orderList);
             switch (typeOfOrder.toLowerCase()) {
                 case "success":
+                    log.debug("Order success" + getSuccessedOrder());
                     return new Result<>(EnumResult.Success, getSuccessedOrder().getData());
                 case "unsuccess":
+                    log.debug("Order unsuccess" + getUnsuccessedOrder());
                     return new Result<>(EnumResult.Success, getUnsuccessedOrder().getData());
                 case "all":
+                    log.debug("Orderr all" + orderList);
                     return new Result<>(EnumResult.Success, orderList);
                 default:
+                    log.error("getAllOrders - unsuccess");
                     return new Result<>(EnumResult.Error);
             }
         } catch (Exception e) {
+            log.info("getAllOrders - unsuccess");
             log.error(e);
             return new Result<>(EnumResult.Error);
         }
@@ -121,20 +138,26 @@ public class DataProviderCsv implements IDataProvider {
     @Override
     public Result<List<Product>> getProductsList(EnumCategory category) {
         try {
+            log.info("getProductsList");
             if (category == null) {
+                log.error("Category == null");
                 return new Result<>(EnumResult.Error);
             }
             String method = Constants.GET_PRODUCT_LIST;
             List<Product> productList = csvToBean(Product.class, Constants.CSV_PRODUCT, method);
+            log.debug(productList);
             switch (category) {
                 case NONE -> {
+                    log.debug("ProductsList" + productList);
                     return new Result<>(EnumResult.Success, productList);
                 }
                 default -> {
+                    log.debug("ProductsList" + filterProductByCategory(category));
                     return new Result(EnumResult.Success, filterProductByCategory(category));
                 }
             }
         } catch (Exception e) {
+            log.info("getProductsList - unsuccess");
             log.error(e);
             return new Result<>(EnumResult.Error);
         }
@@ -215,7 +238,7 @@ public class DataProviderCsv implements IDataProvider {
 
 
     @Override
-    public Boolean addCustomer(Customer customer){
+    public Boolean addCustomer(Customer customer) {
         final String method = String.format(Constants.ADD, Customer.class.getSimpleName());
         List<Customer> customers = csvToBean(Customer.class, Constants.CSV_CUSTOMER, method);
         if (customers.stream().anyMatch(o -> o.getId() == customer.getId())){
@@ -226,7 +249,7 @@ public class DataProviderCsv implements IDataProvider {
     }
 
     @Override
-    public Boolean deleteCustomer(long id){
+    public Boolean deleteCustomer(long id) {
         final String method = String.format(Constants.DELETE, Customer.class.getSimpleName());
         List<Customer> objects = csvToBean(Customer.class, Constants.CSV_CUSTOMER, method);
         objects.removeIf(o -> o.getId() == id);
@@ -235,7 +258,7 @@ public class DataProviderCsv implements IDataProvider {
     }
 
     @Override
-    public Boolean updateCustomer(Customer customer){
+    public Boolean updateCustomer(Customer customer) {
         final String method = String.format(Constants.UPDATE, Customer.class.getSimpleName());
         List<Customer> objects = csvToBean(Customer.class, Constants.CSV_CUSTOMER, method);
         if (objects.stream().noneMatch(o -> o.getId() == customer.getId())){
@@ -247,7 +270,7 @@ public class DataProviderCsv implements IDataProvider {
     }
 
     @Override
-    public Result<Customer> getCustomerById(long id){
+    public Result<Customer> getCustomerById(long id) {
         final String method = String.format(Constants.GET_ID, Customer.class.getSimpleName());
         List<Customer> objects = csvToBean(Customer.class, Constants.CSV_CUSTOMER, method);
         return new Result(EnumResult.Success, objects.stream().filter(o -> o.getId() == id).findFirst().orElse(new Customer()));
@@ -270,7 +293,7 @@ public class DataProviderCsv implements IDataProvider {
     }
 
     @Override
-    public Result<Carpet> getCarpetById(long id){
+    public Result<Carpet> getCarpetById(long id) {
         return new Result<>(EnumResult.Success, getSharedProductById(Carpet.class, id).orElse(new Carpet()));
     }
 
@@ -291,7 +314,7 @@ public class DataProviderCsv implements IDataProvider {
     }
 
     @Override
-    public Result<Chair> getChairById(long id){
+    public Result<Chair> getChairById(long id) {
         return new Result<>(EnumResult.Success, getSharedProductById(Chair.class, id).orElse(new Chair()));
     }
 
@@ -312,12 +335,12 @@ public class DataProviderCsv implements IDataProvider {
     }
 
     @Override
-    public Result<Table> getTableById(long id){
+    public Result<Table> getTableById(long id) {
         return new Result<>(EnumResult.Success, getSharedProductById(Table.class, id).orElse(new Table()));
     }
 
 
-    public <T extends Product> Boolean addSharedProduct(Class<T> cl, T obj){
+    public <T extends Product> Boolean addSharedProduct(Class<T> cl, T obj) {
         final String method = String.format(Constants.ADD, cl.getSimpleName());
         String classname = getClassName(cl);
         List<T> list = csvToBean(cl, classname, method);
@@ -328,7 +351,7 @@ public class DataProviderCsv implements IDataProvider {
         return beanToCsv(list, classname, method) != EnumResult.Error;
     }
 
-    public <T extends Product> Boolean deleteSharedProduct(Class<T> cl, long id){
+    public <T extends Product> Boolean deleteSharedProduct(Class<T> cl, long id) {
         final String method = String.format(Constants.DELETE, cl.getSimpleName());
         String className = getClassName(cl);
         List<T> objects = csvToBean(cl, className, method);
@@ -337,7 +360,7 @@ public class DataProviderCsv implements IDataProvider {
         return true;
     }
 
-    public <T extends Product> Boolean updateSharedProduct(Class<T> cl, T obj){
+    public <T extends Product> Boolean updateSharedProduct(Class<T> cl, T obj) {
         final String method = String.format(Constants.UPDATE, cl.getSimpleName());
         String classname = getClassName(cl);
         List<T> objects = csvToBean(cl, classname, method);
@@ -349,7 +372,7 @@ public class DataProviderCsv implements IDataProvider {
         return beanToCsv(objects, Constants.NOT_ID, method) != EnumResult.Error;
     }
 
-    public <T extends Product> Optional<T> getSharedProductById(Class<T> cl, long id){
+    public <T extends Product> Optional<T> getSharedProductById(Class<T> cl, long id) {
         final String method = String.format(Constants.GET_ID, cl.getSimpleName());
         String className = getClassName(cl);
         List<T> objects = csvToBean(cl, className, method);
@@ -357,11 +380,11 @@ public class DataProviderCsv implements IDataProvider {
     }
 
 
-    private static HistoryContent createHistoryContent(String method, Object object, EnumResult enumResult){
+    private static HistoryContent createHistoryContent(String method, Object object, EnumResult enumResult) {
         return new HistoryContent(DataProviderCsv.class.getSimpleName(), new Date(), Constants.ACTOR_NAME, method, object, enumResult);
     }
 
-    private <T> EnumResult beanToCsv(List<T> lst, String key, String method){
+    private <T> EnumResult beanToCsv(List<T> lst, String key, String method) {
         EnumResult result;
         try {
             FileWriter fileWriter = new FileWriter(ConfigurationUtil.getConfigurationEntry(key), false);
@@ -379,7 +402,7 @@ public class DataProviderCsv implements IDataProvider {
         return result;
     }
 
-    public static <T> List<T> csvToBean(Class<T> cls, String key, String method){
+    public static <T> List<T> csvToBean(Class<T> cls, String key, String method) {
         try {
             CSVReader csvReader = new CSVReader(new FileReader(ConfigurationUtil.getConfigurationEntry(key)));
             CsvToBean<T> csvToBean = new CsvToBeanBuilder<T>(csvReader).withType(cls).build();
@@ -394,8 +417,8 @@ public class DataProviderCsv implements IDataProvider {
         return new ArrayList<>();
     }
 
-    public <T> String getClassName(Class<T> cl){
-        return switch (cl.getSimpleName().toLowerCase()){
+    public <T> String getClassName(Class<T> cl) {
+        return switch (cl.getSimpleName().toLowerCase()) {
             case Constants.PRODUCT_CONST -> Constants.CSV_PRODUCT;
             case Constants.CHAIR_CONST -> Constants.CSV_CHAIR;
             case Constants.TABLE_CONST -> Constants.CSV_TABLE;
